@@ -2,7 +2,7 @@ type arraySeries = Array<[number, number]>
 type objectInstance = { [key: string | number]: number }
 type objectSeries = objectInstance[]
 
-const LLTB = (series: arraySeries | objectSeries, threshold: number): arraySeries | objectSeries => {
+const LTTB = (series: arraySeries | objectSeries, threshold: number): arraySeries | objectSeries => {
 
     const isObject = series.constructor === Object
 
@@ -96,4 +96,4 @@ const LLTB = (series: arraySeries | objectSeries, threshold: number): arraySerie
     return downsampled
 }
 
-export default LLTB
+export default LTTB
