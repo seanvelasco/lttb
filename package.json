@@ -1,0 +1,30 @@
+{
+  "name": "@seanvelasco/lltb",
+  "version": "1.0.0",
+  "description": "Largest-Triangle-Three-Buckets Algorithm",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "prepublish": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seanvelasco/lltb.git"
+  },
+  "keywords": [
+    "downsampling",
+    "algorithm",
+    "charting",
+    "graphing",
+    "imaging"
+  ],
+  "author": "Sean Velasco <seanvelasco@ieee.org>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/seanvelasco/lltb/issues"
+  },
+  "homepage": "https://github.com/seanvelasco/lltb#readme",
+  "devDependencies": {
+    "typescript": "^4.7.3"
+  }
+}
