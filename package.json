@@ -1,6 +1,6 @@
 {
   "name": "@seanvelasco/lttb",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Largest-Triangle-Three-Buckets Algorithm",
   "main": "build/index.js",
   "types": "build/index.d.ts",

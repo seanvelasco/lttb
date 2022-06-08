@@ -1,14 +1,20 @@
-type arraySeries = Array<[number, number]>
-type objectInstance = { [key: string | number]: number }
-type objectSeries = objectInstance[]
+// Can be decoupled from Philips code for use in other projects that use time-series data
 
-const LTTB = (series: arraySeries | objectSeries, threshold: number): arraySeries | objectSeries => {
+const LTTB = (series: number[][], threshold: number): number[][] | {[key: string]: number}[] => {
 
-    const isObject = series.constructor === Object
+    // Convert 1D array number[n=1][] or object {[key: string]: number}[] to 2D array number[n=2][]
 
-    if (isObject) {
-        series = Object.values(series)
+    if (series.every(item => item.constructor.name === 'Object')) {
+        // If series is an object, convert to 2D array
+        series = series.map(item => Object.values(item))
     }
+
+    else if (series.every(item => item instanceof Number)) {
+        // If given a 1D array, convert to 2D array
+        series = series.map((value, count) => [count, value[count]])
+    }
+
+    // Threshhold check
 
     const seriesLength = series.length
 
@@ -20,13 +26,15 @@ const LTTB = (series: arraySeries | objectSeries, threshold: number): arraySerie
         return [[series[0][0], series[0][1]]] // Design decision, however, to return a point
     }
 
-    const downsampled: any = []
+    // Begin downsampling
+
+    const downsampled: number[][] = []
     let sampledIndex = 0
     let bucket = (seriesLength - 2) / (threshold - 2)
     let point: number = 0
     let nextPoint: number = 0
     let area: number
-    let maxAreaPoint: object = []
+    let maxAreaPoint: number[] = []
     let maxArea: number
 
     downsampled[sampledIndex++] = series[point]
@@ -64,7 +72,7 @@ const LTTB = (series: arraySeries | objectSeries, threshold: number): arraySerie
         area = -1
 
         while (rangeOffs < rangeTo) {
-        
+
             area = Math.abs((pointBucketX - averageX) * (series[rangeOffs][1] - pointBucketY) - (pointBucketX - series[rangeOffs][0]) * (averageY - pointBucketY)) * 0.5;
 
             if (area > maxArea) {
@@ -85,15 +93,16 @@ const LTTB = (series: arraySeries | objectSeries, threshold: number): arraySerie
         throw new Error('Something went wrong with downsampling')
     }
 
-    if (isObject) {
-        const keys = Object.keys(series)
-        const downsampledObject: objectInstance = {}
+    const downsampledObject: { [key: string]: number }[] = []
 
-        for (let index in keys) {
-            downsampledObject[keys[index]] = downsampled[index]
+    for (let index in downsampled) {
+        downsampledObject[index] = {
+            x: downsampled[index][0],
+            y: downsampled[index][1]
         }
     }
-    return downsampled
+
+    return downsampledObject
 }
 
 export default LTTB
